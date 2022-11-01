@@ -1,0 +1,22 @@
+package sss.oct24
+
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.col
+
+object drop_column {
+  def main(args: Array[String]): Unit = {
+    //instialise spark session
+    val spark = SparkSession.builder().master("local[1]").getOrCreate()
+    //create dataframe load data from csv file
+    val df = spark.read.option("header", true).option("inferSchema", true)
+      .csv("C:\\Users\\Niwas\\Downloads\\MOCK_DATA (2).csv")
+    //add new column with new name
+    val df2 = df.withColumn("fname", col("first_name"))
+      .withColumn("lname", col("last_name"))
+      .withColumn("gmail", col("email"))
+    //drop some columns from dataframe
+    df2.drop("first_name", "last_name", "email").show()
+
+    //df2.explain()
+  }
+}
